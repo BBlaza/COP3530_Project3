@@ -48,5 +48,5 @@ release_rate_max = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizonta
 
 # Database selection
 structure_var = tk.StringVar(value="")
-btree_radiobutton = tk.Radiobutton(filters_frame, text="B tree", variable=structure_var, value="btree")
-bplus_radiobutton = tk.Radiobutton(filters_frame, text="B+ tree", variable=structure_var, value="bplus")
+btree_radiobutton = tk.Radiobutton(search_frame, text="B tree", variable=structure_var, value="btree")
+bplus_radiobutton = tk.Radiobutton(search_frame, text="B+ tree", variable=structure_var, value="bplus")
