@@ -1,4 +1,3 @@
-import functions
 import elements
 
 
@@ -38,6 +37,10 @@ elements.rating_min_date_label.grid(row=2, column=1, padx=3, pady=3, sticky="e")
 elements.release_rate_min.grid(row=2, column=2, padx=2, pady=3)
 elements.rating_max_date_label.grid(row=2, column=3, padx=3, pady=3, sticky="e")
 elements.release_rate_max.grid(row=2, column=4, padx=5, pady=3)
+
+# Database selection
+elements.btree_radiobutton.grid(row=3, column=0, columnspan=2, padx=5, pady=5, sticky="w")
+elements.bplus_radiobutton.grid(row=3, column=2, columnspan=2, padx=5, pady=5, sticky="w")
 
 # Run the app
 elements.root.mainloop()
