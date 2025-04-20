@@ -1,7 +1,7 @@
 import functions
 import elements
 
-#pranav likes dick
+
 #sort movies according to genre, release date, movie name, cast
 
 
