@@ -1,8 +1,8 @@
 import elements
-
+import GUI_functions
 
 #sort movies according to genre, release date, movie name, cast
-
+elements.search_button.config(command=GUI_functions.search)
 
 # Title
 elements.title.pack(pady=10)
@@ -41,6 +41,11 @@ elements.rating_min_date_label.grid(row=2, column=1, padx=3, pady=3, sticky="e")
 elements.release_rate_min.grid(row=2, column=2, padx=2, pady=3)
 elements.rating_max_date_label.grid(row=2, column=3, padx=3, pady=3, sticky="e")
 elements.release_rate_max.grid(row=2, column=4, padx=5, pady=3)
+
+# Result table
+elements.results_frame.pack(fill="both", expand=True, padx=10, pady=10)
+elements.results_tree.grid(row=0, column=0, sticky="nsew")
+elements.vsb.grid(row=0, column=1, sticky="ns")
 
 # Run the app
 elements.root.mainloop()

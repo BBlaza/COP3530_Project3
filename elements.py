@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 import GUI_functions
-import global_variables
 
 # Initialize the main window
 root = tk.Tk()
@@ -20,7 +19,7 @@ title = tk.Label(root, text="Welcome to Movie Finder!", font=TITLE_FONT, justify
 search_frame = tk.Frame(root)
 search_icon = tk.Label(search_frame, text="🔍", font=SUBTITLE_FONT)
 search_entry = tk.Entry(search_frame, width=50, font=LABEL_FONT)
-search_button = tk.Button(search_frame, text="Search", font=SUBTITLE_FONT, command=GUI_functions.search)
+search_button = tk.Button(search_frame, text="Search", font=SUBTITLE_FONT)
 
 # Filters frame
 filters_frame = tk.Frame(root)
@@ -48,5 +47,26 @@ release_rate_min = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizonta
 release_rate_max = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizontal", length=100, resolution= 0.1)
 
 # Database selection
-btree_radiobutton = tk.Radiobutton(search_frame, text="B tree", variable=global_variables.structure_var, value="btree")
-bplus_radiobutton = tk.Radiobutton(search_frame, text="B+ tree", variable=global_variables.structure_var, value="bplus")
+structure_var = tk.StringVar(value="")
+btree_radiobutton = tk.Radiobutton(search_frame, text="B tree", variable=structure_var, value="btree")
+bplus_radiobutton = tk.Radiobutton(search_frame, text="B+ tree", variable=structure_var, value="bplus")
+
+# Result table
+results_frame = tk.Frame(root)
+columns = ("tconst", "title_type", "primary_title", "start_year", "genres")
+results_tree = ttk.Treeview(
+    results_frame,
+    columns=columns,
+    show="headings",
+    height=10
+)
+for col in columns:
+    results_tree.heading(col, text=col.replace("_", " ").title())
+    results_tree.column(col, width=120, anchor="w")
+
+vsb = ttk.Scrollbar(results_frame, orient="vertical", command=results_tree.yview)
+results_tree.configure(yscrollcommand=vsb.set)
+
+# let the tree+scrollbar expand to fill results_frame
+results_frame.rowconfigure(0, weight=1)
+results_frame.columnconfigure(0, weight=1)
