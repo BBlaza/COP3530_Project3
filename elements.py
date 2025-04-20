@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 import GUI_functions
+import global_variables
 
 # Initialize the main window
 root = tk.Tk()
@@ -47,6 +48,5 @@ release_rate_min = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizonta
 release_rate_max = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizontal", length=100, resolution= 0.1)
 
 # Database selection
-structure_var = tk.StringVar(value="")
-btree_radiobutton = tk.Radiobutton(search_frame, text="B tree", variable=structure_var, value="btree")
-bplus_radiobutton = tk.Radiobutton(search_frame, text="B+ tree", variable=structure_var, value="bplus")
+btree_radiobutton = tk.Radiobutton(search_frame, text="B tree", variable=global_variables.structure_var, value="btree")
+bplus_radiobutton = tk.Radiobutton(search_frame, text="B+ tree", variable=global_variables.structure_var, value="bplus")
