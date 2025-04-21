@@ -1,10 +1,9 @@
 from db import get_cursor
 import elements
+import time
 
 def Btree_search():
     title = elements.search_entry.get().strip()
-    if not title:
-        return
 
     min_runtime, max_runtime = 0, 0
     if (elements.duration_range_combo.get() == 'less than 30 hours'):
@@ -37,6 +36,10 @@ def Btree_search():
     lowest_rate = elements.rating_scale_min.get()
     highest_rate = elements.rating_scale_max.get()
 
+    if (min_release_date > max_release_date) or (lowest_rate > highest_rate):
+        elements.log_label.config(text="Maximum cannot be greater than minimum", fg="red")
+        return
+
     cur = get_cursor()
     query = (
         "SELECT tconst, title_type, primary_title, start_year, runtime_minutes, genres, rating "
@@ -57,13 +60,23 @@ def Btree_search():
         query += " AND start_year <= %s"
         params.append(max_release_date)
 
-    if lowest_rate:
-        query += " AND rating >= %s"
-        params.append(lowest_rate)
-
-    if highest_rate:
-        query += " AND rating <= %s"
-        params.append(highest_rate)
+    if elements.take_null_rating_var.get():
+        # Accept NULLs + filter the ones that have ratings
+        if lowest_rate:
+            query += " AND (rating IS NULL OR rating >= %s)"
+            params.append(lowest_rate)
+        if highest_rate:
+            query += " AND (rating IS NULL OR rating <= %s)"
+            params.append(highest_rate)
+    else:
+        # Ignore NULLs entirely
+        query += " AND rating IS NOT NULL"
+        if lowest_rate:
+            query += " AND rating >= %s"
+            params.append(lowest_rate)
+        if highest_rate:
+            query += " AND rating <= %s"
+            params.append(highest_rate)
 
     if min_runtime:
         query += " AND runtime_minutes >= %s"
@@ -76,10 +89,15 @@ def Btree_search():
     # Limit results
     query += " LIMIT 100"
 
+    start_time = time.time()
+
     # Execute query
     cur.execute(query, params)
     rows = cur.fetchall()
     cur.close()
+    end_time = time.time()
+    duration = end_time - start_time
+    elements.log_label.config(text=f"Search completed in {duration:.3f} seconds", fg="black")
 
     # clear old results
     for item in elements.results_tree.get_children():

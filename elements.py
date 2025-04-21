@@ -4,7 +4,7 @@ from tkinter import ttk
 # Initialize the main window
 root = tk.Tk()
 root.title("Movie Finder")
-root.geometry("600x400")
+root.geometry("1200x800")
 
 # Fonts
 TITLE_FONT = ("Helvetica", 24, "bold")
@@ -18,11 +18,11 @@ title = tk.Label(root, text="Welcome to Movie Finder!", font=TITLE_FONT, justify
 search_frame = tk.Frame(root)
 search_icon = tk.Label(search_frame, text="🔍", font=SUBTITLE_FONT)
 search_entry = tk.Entry(search_frame, width=50, font=LABEL_FONT)
-search_button_Btree = tk.Button(search_frame, text="Search in B Tree", font=SUBTITLE_FONT)
-search_button_Bptree = tk.Button(search_frame, text="Search in B+ Tree", font=SUBTITLE_FONT)
+search_button_Bplustree = tk.Button(search_frame, text="Search in B+ Tree", font=SUBTITLE_FONT)
+search_button_BRtree = tk.Button(search_frame, text="Search in Red-Black Tree", font=SUBTITLE_FONT)
 
-# Timer
-search_timer = tk.Label(root, font=SUBTITLE_FONT)
+# Log
+log_label = tk.Label(root, font=LABEL_FONT)
 
 # Filters frame
 filters_frame = tk.Frame(root)
@@ -39,15 +39,19 @@ genre_combo = ttk.Combobox(filters_frame, values=['', 'Action', 'Adult', 'Advent
 release_label = tk.Label(filters_frame, text="Release Date:", font=SUBTITLE_FONT)
 release_min_date_label = tk.Label(filters_frame, text="Minimum:", font=LABEL_FONT)
 release_max_date_label = tk.Label(filters_frame, text="Maximum:", font=LABEL_FONT)
-release_scale_min = tk.Scale(filters_frame, from_=1980, to=2025, orient="horizontal", length=100)
-release_scale_max = tk.Scale(filters_frame, from_=1981, to=2025, orient="horizontal", length=100)
+release_scale_min = tk.Scale(filters_frame, from_=1800, to=2025, orient="horizontal", length=200)
+release_scale_max = tk.Scale(filters_frame, from_=1801, to=2025, orient="horizontal", length=200)
 
 # Rating
 rating_label = tk.Label(filters_frame, text="Rate:", font=SUBTITLE_FONT)
 rating_min_date_label = tk.Label(filters_frame, text="Minimum:", font=LABEL_FONT)
 rating_max_date_label = tk.Label(filters_frame, text="Maximum:", font=LABEL_FONT)
-rating_scale_min = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizontal", length=100, resolution=0.1)
-rating_scale_max = tk.Scale(filters_frame, from_=0.1, to=10.0, orient="horizontal", length=100, resolution= 0.1)
+rating_scale_min = tk.Scale(filters_frame, from_=0.0, to=10.0, orient="horizontal", length=200, resolution=0.1)
+rating_scale_max = tk.Scale(filters_frame, from_=0.1, to=10.0, orient="horizontal", length=200, resolution= 0.1)
+
+# Null Rating
+take_null_rating_var = tk.BooleanVar(value=False)
+take_null_rating_checkbox = tk.Checkbutton(filters_frame, text="Include movies without ratings",variable=take_null_rating_var)
 
 # Result table
 results_frame = tk.Frame(root)

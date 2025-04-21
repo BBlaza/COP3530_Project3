@@ -2,8 +2,8 @@ import elements
 import GUI_functions
 
 #sort movies according to genre, release date, movie name, cast
-elements.search_button_Btree.config(command=GUI_functions.Btree_search)
-elements.search_button_Bptree.config(command=GUI_functions.Bptree_search)
+elements.search_button_Bplustree.config(command=GUI_functions.Btree_search)
+elements.search_button_BRtree.config(command=GUI_functions.Bptree_search)
 
 # Title
 elements.title.pack(pady=10)
@@ -12,11 +12,11 @@ elements.title.pack(pady=10)
 elements.search_frame.pack(pady=30)
 elements.search_icon.grid(row=0, column=0)
 elements.search_entry.grid(row=0, column=1, columnspan=2)
-elements.search_button_Btree.grid(row=1, column=1)
-elements.search_button_Bptree.grid(row=1, column=2)
+elements.search_button_Bplustree.grid(row=1, column=1)
+elements.search_button_BRtree.grid(row=1, column=2)
 
-# Timer
-elements.search_timer.pack()
+# Log
+elements.log_label.pack()
 
 # Filters frame
 elements.filters_frame.pack(pady=20)
@@ -42,6 +42,7 @@ elements.rating_min_date_label.grid(row=2, column=1, padx=3, pady=3, sticky="e")
 elements.rating_scale_min.grid(row=2, column=2, padx=2, pady=3)
 elements.rating_max_date_label.grid(row=2, column=3, padx=3, pady=3, sticky="e")
 elements.rating_scale_max.grid(row=2, column=4, padx=5, pady=3)
+elements.take_null_rating_checkbox.grid(row=3, column=1, padx=5, pady=5, sticky="e")
 
 # Result table
 elements.results_frame.pack(fill="both", expand=True, padx=10, pady=10)
