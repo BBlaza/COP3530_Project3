@@ -108,4 +108,11 @@ def Btree_search():
         elements.results_tree.insert("", "end", values=row)
 
 def Bptree_search():
-    pass
+    db = MovieDatabase('movies.db', 'title.basics.tsv.gz')
+    db.load_ratings('title.ratings.tsv.gz')
+
+
+    multi_results = db.get_movies_by_filters(genre="Action", ratingMin=7.5)
+   
+
+    db.close()
