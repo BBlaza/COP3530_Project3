@@ -52,37 +52,63 @@ class MovieDatabaseSQLite:
             except Exception as e:
                 print(f"Skipping row due to error: {e}")
         self.conn.commit()
+        
+    def load_ratings(self, ratings_file):
+        with gzip.open(ratings_file, 'rt', encoding='utf-8') as f:
+            reader = csv.DictReader(f, delimiter='\t')
+            cursor = self.conn.cursor()
+            for row in reader:
+                tconst = row['tconst']
+                rating = row['averageRating']
+                try:
+                    cursor.execute('''
+                        UPDATE movies
+                        SET averageRating = ?
+                        WHERE tconst = ?
+                    ''', (float(rating), tconst))
+                except Exception as e:
+                    print(f"Error updating rating for {tconst}: {e}")
+            self.conn.commit()
 
-    def get_movies_by_genre_year(self, genre, year):
+    def get_movies_by_filters(self, genre=None, startingYear=None, endingYear=None, movieName=None, ratingMin=None, ratingMax=None):
         cursor = self.conn.cursor()
-        cursor.execute('''
-            SELECT primaryTitle, startYear, genres
-            FROM movies
-            WHERE genres LIKE ? AND startYear = ?
-            ORDER BY primaryTitle
-        ''', (f'%{genre}%', year))
-        return cursor.fetchall()
 
-    def get_movies_by_multiple_genres(self, genres, year=None):
-        cursor = self.conn.cursor()
         query = '''
-            SELECT primaryTitle, startYear, genres
+            SELECT primaryTitle, startYear, genres, averageRating
             FROM movies
-            WHERE 1 = 1
+            WHERE 1=1
         '''
         params = []
 
-        for genre in genres:
+        if genre:
             query += ' AND genres LIKE ?'
             params.append(f'%{genre}%')
 
-        if year is not None:
-            query += ' AND startYear = ?'
-            params.append(year)
+        if movieName:
+            query += ' AND primaryTitle LIKE ?'
+            params.append(f'%{movieName}%')
+
+        if startingYear is not None:
+            query += ' AND startYear >= ?'
+            params.append(startingYear)
+
+        if endingYear is not None:
+            query += ' AND startYear <= ?'
+            params.append(endingYear)
+
+        if ratingMin is not None:
+            query += ' AND averageRating >= ?'
+            params.append(ratingMin)
+
+        if ratingMax is not None:
+            query += ' AND averageRating <= ?'
+            params.append(ratingMax)
 
         query += ' ORDER BY primaryTitle'
+
         cursor.execute(query, params)
         return cursor.fetchall()
+
 
     def close(self):
         self.conn.close()
