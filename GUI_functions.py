@@ -1,15 +1,15 @@
-#from db import get_cursor
+from db import get_cursor
 import elements
 import time
 import SQLite
 
 def Btree_search():
     pass
-    '''title = elements.search_entry.get().strip()
+    title = elements.search_entry.get().strip()
 
     min_runtime, max_runtime = 0, 0
-    if (elements.duration_range_combo.get() == 'less than 30 hours'):
-        min_runtime = -1
+    if (elements.duration_range_combo.get() == 'less than 30 min'):
+        min_runtime = 0
         max_runtime = 29
     elif (elements.duration_range_combo.get() == '31-59 min'):
         min_runtime = 30
@@ -25,10 +25,10 @@ def Btree_search():
         max_runtime = 299
     elif (elements.duration_range_combo.get() == '5-10 hours'):
         min_runtime = 300
-        max_runtime = 5999
+        max_runtime = 599
     elif (elements.duration_range_combo.get() == 'more than 10 hours'):
-        min_runtime = 6000
-        max_runtime = 9999999
+        min_runtime = 600
+        max_runtime = 0
 
     min_release_date = elements.release_scale_min.get()
     max_release_date = elements.release_scale_max.get()
@@ -108,7 +108,6 @@ def Btree_search():
     # insert new ones
     for row in rows:
         elements.results_tree.insert("", "end", values=row)
-'''
 
 
 def Bptree_search():
@@ -118,8 +117,8 @@ def Bptree_search():
     title = elements.search_entry.get().strip()
 
     min_runtime, max_runtime = 0, 0
-    if (elements.duration_range_combo.get() == 'less than 30 minutes'):
-        min_runtime = -1
+    if (elements.duration_range_combo.get() == 'less than 30 min'):
+        min_runtime = 0
         max_runtime = 29
     elif (elements.duration_range_combo.get() == '31-59 min'):
         min_runtime = 30
@@ -138,7 +137,7 @@ def Bptree_search():
         max_runtime = 599
     elif (elements.duration_range_combo.get() == 'more than 10 hours'):
         min_runtime = 600
-        max_runtime = 9999999
+        max_runtime = 0
 
     min_release_date = elements.release_scale_min.get()
     max_release_date = elements.release_scale_max.get()
@@ -153,7 +152,9 @@ def Bptree_search():
         return
     executionTime = [1]
     rows = db.get_movies_by_filters(executionTime, genre=genre,lowestRuntime=min_runtime, highestRuntime=max_runtime, movieName=title, ratingMin=lowest_rate, ratingMax=highest_rate, startingYear=min_release_date, endingYear=max_release_date)
-    
+
+    elements.log_label.config(text=f"Search completed in {executionTime[0]:.3f} seconds", fg="black")
+
     for item in elements.results_tree.get_children():
         elements.results_tree.delete(item)
 
