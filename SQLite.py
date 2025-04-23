@@ -2,19 +2,22 @@ import gzip
 import csv
 import sqlite3
 import os
-from datetime import datetime
+import time
 
 class MovieDatabaseSQLite:
     def __init__(self, db_name, tsv_gz_file):
-        self.conn = sqlite3.connect(db_name)
+        
         self.tsv_gz_file = tsv_gz_file
 
         if not os.path.exists(db_name):
             print("Database not found, creating and loading data...")
+            self.conn = sqlite3.connect(db_name)
             self.tsv_gz_file = tsv_gz_file
             self.create_table()
             self.load_data()
-            self.load_ratings()
+            self.load_ratings("title.ratings.tsv.gz")
+        else:
+            self.conn = sqlite3.connect(db_name)
 
     def create_table(self):
         cursor = self.conn.cursor()
@@ -27,7 +30,7 @@ class MovieDatabaseSQLite:
                 isAdult INTEGER,
                 startYear INTEGER,
                 endYear INTEGER,
-                runtimeMinutes TEXT,
+                runtimeMinutes INTEGER,
                 genres TEXT,
                 averageRating REAL
             )
@@ -57,7 +60,7 @@ class MovieDatabaseSQLite:
                     int(row['isAdult']) if row['isAdult'] != '\\N' else 0,
                     int(row['startYear']) if row['startYear'] != '\\N' else None,
                     int(row['endYear']) if row['endYear'] != '\\N' else None,
-                    row['runtimeMinutes'],
+                    int(row['runtimeMinutes']) if row['runtimeMinutes'] != '\\N' else None,
                     row['genres'],
                     None
                 ))
@@ -88,7 +91,7 @@ class MovieDatabaseSQLite:
                     print(f"Error updating rating for {tconst}: {e}")
             self.conn.commit()
 
-    def get_movies_by_filters(self,executionTime, genre='',lowestRuntime = None, highestRuntime = None, startingYear=None, endingYear=None, movieName=None, ratingMin=None, ratingMax=None):
+    def get_movies_by_filters(self,executionTime, genre='',lowestRuntime = None, highestRuntime = None, startingYear=None, endingYear=None, movieName=None, ratingMin=None, ratingMax=None, ratingCheck=None):
         cursor = self.conn.cursor()
 
         query = '''
@@ -104,6 +107,7 @@ class MovieDatabaseSQLite:
             params.append(f'%{genre}%')
 
         if lowestRuntime:
+            query += ' AND runtimeMinutes IS NOT NULL'
             query += ' AND runtimeMinutes >= ?'
             params.append(lowestRuntime)
             query += ' AND runtimeMinutes <= ?'
@@ -121,21 +125,27 @@ class MovieDatabaseSQLite:
             query += ' AND startYear <= ?'
             params.append(endingYear)
 
-        if ratingMin is not None:
-            query += ' AND averageRating >= ?'
+        if ratingCheck:
+            query += ' AND (averageRating IS NULL OR averageRating <= ?)'
             params.append(ratingMin)
-
-        if ratingMax is not None:
-            query += ' AND averageRating <= ?'
+            query += ' AND (averageRating IS NULL OR averageRating <= ?)'
             params.append(ratingMax)
+        else:
+            if ratingMin is not None:
+                query += ' AND averageRating >= ?'
+                params.append(ratingMin)
+            if ratingMax is not None:
+                query += ' AND averageRating <= ?'
+                params.append(ratingMax)
 
 
         query += ' ORDER BY primaryTitle LIMIT 100'
-        startTime = datetime.now()
+        startTime = time.time()
 
 
         cursor.execute(query, params)
-        executionTime[0] = datetime.now()-startTime
+        endTime = time.time()
+        executionTime[0] = endTime-startTime
         return cursor.fetchall()
 
 

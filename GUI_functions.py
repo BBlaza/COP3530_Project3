@@ -137,7 +137,7 @@ def Bptree_search():
         max_runtime = 599
     elif (elements.duration_range_combo.get() == 'more than 10 hours'):
         min_runtime = 600
-        max_runtime = 0
+        max_runtime = 9999
 
     min_release_date = elements.release_scale_min.get()
     max_release_date = elements.release_scale_max.get()
@@ -151,9 +151,10 @@ def Bptree_search():
         elements.log_label.config(text="Maximum cannot be greater than minimum", fg="red")
         return
     executionTime = [1]
-    rows = db.get_movies_by_filters(executionTime, genre=genre,lowestRuntime=min_runtime, highestRuntime=max_runtime, movieName=title, ratingMin=lowest_rate, ratingMax=highest_rate, startingYear=min_release_date, endingYear=max_release_date)
+    rating = elements.take_null_rating_var.get()
+    rows = db.get_movies_by_filters(executionTime, genre=genre,lowestRuntime=min_runtime, highestRuntime=max_runtime, movieName=title, ratingMin=lowest_rate, ratingMax=highest_rate, startingYear=min_release_date, endingYear=max_release_date, ratingCheck=rating)
 
-    elements.log_label.config(text=f"Search completed in {executionTime[0]:.3f} seconds", fg="black")
+    elements.log_label.config(text=f"Search completed in" + str(executionTime[0]) + " seconds", fg="black")
 
     for item in elements.results_tree.get_children():
         elements.results_tree.delete(item)
