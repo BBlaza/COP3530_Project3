@@ -1,14 +1,13 @@
 # COP3530_Project3
 
-## Dataset Source
-https://datasets.imdbws.com/
 
 ##How to setup
 1. Download the repository source code
-2. Download the file title.basics.tsv.gz using this link: https://datasets.imdbws.com/
-3. Below are the instructions for having the current database on your own PostgreSQL.
+2. Download the file title.basics.tsv.gz using this link: https://datasets.imdbws.com/ and put this file into the same repository as the main.py.
+3. Download the file title.ratings.tsv.gz using the previous link.
+4. Below are the instructions for having the current database on your own PostgreSQL.
 
-PostgreSQL Setup
+##PostgreSQL Setup
 1. Make sure you have PostgreSQL downloaded and installed.
 2. Save this attached file "movie_db.dump" to any folder on your computer 
 3. Make sure you save the bin folder path (inside your PostgreSQL folder) to system path environment variables
