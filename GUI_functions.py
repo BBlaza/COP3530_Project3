@@ -1,10 +1,11 @@
-from db import get_cursor
+#from db import get_cursor
 import elements
 import time
 import SQLite
 
 def Btree_search():
-    title = elements.search_entry.get().strip()
+    pass
+    '''title = elements.search_entry.get().strip()
 
     min_runtime, max_runtime = 0, 0
     if (elements.duration_range_combo.get() == 'less than 30 hours'):
@@ -107,17 +108,17 @@ def Btree_search():
     # insert new ones
     for row in rows:
         elements.results_tree.insert("", "end", values=row)
-
+'''
 
 
 def Bptree_search():
     db = SQLite.MovieDatabaseSQLite('movies.db', 'title.basics.tsv.gz')
-    db.load_ratings('title.ratings.tsv.gz')
+    #db.load_ratings('title.ratings.tsv.gz')
 
     title = elements.search_entry.get().strip()
 
     min_runtime, max_runtime = 0, 0
-    if (elements.duration_range_combo.get() == 'less than 30 hours'):
+    if (elements.duration_range_combo.get() == 'less than 30 minutes'):
         min_runtime = -1
         max_runtime = 29
     elif (elements.duration_range_combo.get() == '31-59 min'):
@@ -134,9 +135,9 @@ def Bptree_search():
         max_runtime = 299
     elif (elements.duration_range_combo.get() == '5-10 hours'):
         min_runtime = 300
-        max_runtime = 5999
+        max_runtime = 599
     elif (elements.duration_range_combo.get() == 'more than 10 hours'):
-        min_runtime = 6000
+        min_runtime = 600
         max_runtime = 9999999
 
     min_release_date = elements.release_scale_min.get()
@@ -150,9 +151,9 @@ def Bptree_search():
     if (min_release_date > max_release_date) or (lowest_rate > highest_rate):
         elements.log_label.config(text="Maximum cannot be greater than minimum", fg="red")
         return
-
-    rows = db.get_movies_by_filters(genre=genre, movieName=title, ratingMin=min_runtime, ratingMax=max_runtime, startingYear=min_release_date, endingYear=max_release_date)
-
+    executionTime = [0]
+    rows = db.get_movies_by_filters(executionTime, genre=genre,lowestRuntime=min_runtime, highestRuntime=max_runtime, movieName=title, ratingMin=lowest_rate, ratingMax=highest_rate, startingYear=min_release_date, endingYear=max_release_date)
+    
     for item in elements.results_tree.get_children():
         elements.results_tree.delete(item)
 
