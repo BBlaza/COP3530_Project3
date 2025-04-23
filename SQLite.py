@@ -127,7 +127,7 @@ class MovieDatabaseSQLite:
 
 
         cursor.execute(query, params)
-        executionTime[1] = datetime.now()-startTime
+        executionTime[0] = datetime.now()-startTime
         return cursor.fetchall()
 
 

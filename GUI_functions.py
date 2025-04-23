@@ -151,7 +151,7 @@ def Bptree_search():
     if (min_release_date > max_release_date) or (lowest_rate > highest_rate):
         elements.log_label.config(text="Maximum cannot be greater than minimum", fg="red")
         return
-    executionTime = [0]
+    executionTime = [1]
     rows = db.get_movies_by_filters(executionTime, genre=genre,lowestRuntime=min_runtime, highestRuntime=max_runtime, movieName=title, ratingMin=lowest_rate, ratingMax=highest_rate, startingYear=min_release_date, endingYear=max_release_date)
     
     for item in elements.results_tree.get_children():
