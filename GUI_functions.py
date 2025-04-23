@@ -112,7 +112,7 @@ def Btree_search():
 
 def Bptree_search():
     db = SQLite.MovieDatabaseSQLite('movies.db', 'title.basics.tsv.gz')
-    #db.load_ratings('title.ratings.tsv.gz')
+  
 
     title = elements.search_entry.get().strip()
 

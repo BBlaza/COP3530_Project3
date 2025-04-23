@@ -1,13 +1,20 @@
 import gzip
 import csv
 import sqlite3
+import os
 from datetime import datetime
 
 class MovieDatabaseSQLite:
     def __init__(self, db_name, tsv_gz_file):
         self.conn = sqlite3.connect(db_name)
         self.tsv_gz_file = tsv_gz_file
-        
+
+        if not os.path.exists(db_name):
+            print("Database not found, creating and loading data...")
+            self.tsv_gz_file = tsv_gz_file
+            self.create_table()
+            self.load_data()
+            self.load_ratings()
 
     def create_table(self):
         cursor = self.conn.cursor()
@@ -37,7 +44,8 @@ class MovieDatabaseSQLite:
         cursor = self.conn.cursor()
         count = 0
         for row in self.read_tsv_gz():
-           
+            if(count>7106256):
+                break
             try:
                 cursor.execute('''
                     INSERT OR IGNORE INTO movies VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
