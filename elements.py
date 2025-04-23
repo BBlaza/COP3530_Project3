@@ -19,7 +19,7 @@ search_frame = tk.Frame(root)
 search_icon = tk.Label(search_frame, text="🔍", font=SUBTITLE_FONT)
 search_entry = tk.Entry(search_frame, width=50, font=LABEL_FONT)
 search_button_Bplustree = tk.Button(search_frame, text="Search in B+ Tree", font=SUBTITLE_FONT)
-search_button_BRtree = tk.Button(search_frame, text="Search in Red-Black Tree", font=SUBTITLE_FONT)
+search_button_BRtree = tk.Button(search_frame, text="Search in B Tree", font=SUBTITLE_FONT)
 
 # Log
 log_label = tk.Label(root, font=LABEL_FONT)
